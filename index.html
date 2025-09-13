@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CookVision Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🍳 CookVision</h1>
+    <p>Paste a YouTube cooking video link below. We'll analyze it and show you the raw cooking steps.</p>
+
+    <input type="text" id="youtubeLink" placeholder="Enter YouTube video URL" />
+    <button onclick="analyzeVideo()">Analyze</button>
+
+    <div id="resultBox">
+      <h2>🔍 Raw Cooking Summary:</h2>
+      <pre id="resultText">Waiting for analysis...</pre>
+    </div>
+  </div>
+
+  <script>
+    async function analyzeVideo() {
+      const link = document.getElementById("youtubeLink").value;
+      const resultText = document.getElementById("resultText");
+      resultText.textContent = "Analyzing...";
+
+      try {
+        const response = await fetch("https://your-backend-url.com/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ youtube_url: link })
+        });
+
+        const data = await response.json();
+        resultText.textContent = data.summary || "No summary returned.";
+      } catch (error) {
+        resultText.textContent = "Error analyzing video.";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
