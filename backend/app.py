@@ -19,6 +19,20 @@ def extract_frames(video_path='video.mp4', interval=5):
     from ultralytics import YOLO
 
 def analyze_frames_with_yolo(frames):
+
+    def generate_summary(detections):
+    summary = []
+    timestamp = 0
+
+    for item in detections:
+        for frame, objects in item.items():
+            if objects:
+                actions = ", ".join(objects)
+                summary.append(f"{timestamp:02d}:00 - Detected: {actions}")
+        timestamp += 5  # Assuming 5-second intervals
+
+    return "\n".join(summary)
+
     model = YOLO("yolov8n.pt")  # Use nano model for speed
     detections = []
 
