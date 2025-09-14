@@ -15,6 +15,21 @@ def download_video(url):
     import cv2
 
 def extract_frames(video_path='video.mp4', interval=5):
+
+    from ultralytics import YOLO
+
+def analyze_frames_with_yolo(frames):
+    model = YOLO("yolov8n.pt")  # Use nano model for speed
+    detections = []
+
+    for frame in frames:
+        results = model(frame)
+        labels = results[0].names
+        detected = [labels[int(box.cls)] for box in results[0].boxes]
+        detections.append({frame: detected})
+
+    return detections
+
     cap = cv2.VideoCapture(video_path)
     frame_count = 0
     saved_frames = []
